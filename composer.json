@@ -1,0 +1,7 @@
+{
+    "require": {
+        "twbs/bootstrap": "4.3.*",
+        "pear/file_marc": "1.2.*",
+        "scriptotek/simplemarcparser":"0.9.*"
+    }
+}

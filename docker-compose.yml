@@ -1,0 +1,25 @@
+version: '3.3'
+
+services:
+  apache2:
+    image: php:apache
+    ports:
+      - "81:80"
+    restart: always
+    volumes:
+      - './:/var/www/html'
+      
+  
+  composer:
+    depends_on:
+      - apache2 
+    restart: "no"
+    image: composer:latest
+    command: install
+    volumes:
+      - './:/app'
+
+volumes:
+    db_data: {}
+    data: {}
+    solr_data: {}
