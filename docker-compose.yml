@@ -19,6 +19,16 @@ services:
     volumes:
       - './:/app'
 
+  couchdb:
+    depends_on:
+      - apache2 
+    restart: "always"
+    image: couchdb:latest
+    ports:
+      - "5984:5984"
+    volumes:
+      - db_data    
+
 volumes:
     db_data: {}
     data: {}
