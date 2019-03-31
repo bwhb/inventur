@@ -2,6 +2,8 @@
     "require": {
         "twbs/bootstrap": "4.3.*",
         "pear/file_marc": "1.2.*",
-        "scriptotek/simplemarcparser":"0.9.*"
+        "scriptotek/marc":"2.*",
+        "zendframework/zend-xml2json":"3.*",
+        "php-on-couch/php-on-couch":"2.*"
     }
 }

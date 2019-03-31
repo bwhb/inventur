@@ -27,7 +27,7 @@ services:
     ports:
       - "5984:5984"
     volumes:
-      - db_data    
+      - data    
 
 volumes:
     db_data: {}
