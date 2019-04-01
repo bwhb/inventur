@@ -27,9 +27,8 @@ services:
     ports:
       - "5984:5984"
     volumes:
-      - data    
+      - db_data    
 
 volumes:
     db_data: {}
-    data: {}
-    solr_data: {}
+    

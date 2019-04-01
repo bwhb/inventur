@@ -41,15 +41,16 @@ localDB.createIndex({
 .then(function(){
 	localDB.find({
 	selector:
-	{sig: {$gt: '-Aa 2'}},
+	{sig: {$gt: '-C'}},
 	sort: ['sig'],
-	limit:25,
+	limit:250,
 	use_index: 'sig'
 	})
 	.then(function(d){
+		$("body").empty()
 		d.docs.forEach(
 			function(e){
-				console.dir(e.sig.replace(/(.*)\n.*/,"$1"))
+				$("body").append("<p>"+e.sig.replace(/(.*)\n.*/,"$1"));
 		})
 	})
 })
