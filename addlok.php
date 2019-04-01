@@ -1,5 +1,7 @@
 <?php
 ini_set('memory_limit', '1024M'); // or you could use 1G
+#ini_set('display_errors','Off');
+ini_set('error_reporting', 0 );
 
 require __DIR__ . '/vendor/autoload.php';
 
@@ -13,13 +15,19 @@ $journals = new File_MARC('data/marc21/051-lok.mrc');
 $os = [];
 $ppns = [];
 while ($record = $journals->next()) {
-    if(preg_match("/preu|kultur/i",$record->getField('852', true)->getSubfield('z')) OR preg_match("/^pr|^ol/i",$record->getField('935', true))){
+	foreach($record->getFields('852') as $v) forEach($v->getSubfields("c") as $sig) //echo $sig."\n";
+    if(preg_match("/preu|kultur/i",$record->getField('852', true)->getSubfield('z')) OR preg_match("/^pr|^ol/i",$record->getField('935', true)) OR (!preg_match("/(par|ent|ads|zsn)/i",$sig)&& !$record->getField('935', true))){
+    //if((!empty($sig)&&!preg_match("/(par|ent|ads|zsn)/i",$sig) && !$record->getField('935', true))){
+		echo $sig;
 		$i++;
 		unset ($o);
-		$o->ppn = preg_replace("/\d{3}\s+(.*)/","$1",$record->getField('004', true)->__toString());
-		$o->sig = preg_replace("/\d{3}\s+1 _c([^\n]*?)\n.*/","$1",$record->getFields('852',true)[2]);
+			$o->ppn = preg_replace("/\d{3}\s+(.*)/","$1",$record->getField('004', true)->__toString());
+		if ($record->getField('004', true)){
+		}
+		$o->sig =preg_replace("/\[c\]:\s(.*)/","$1",$sig);  
+		//preg_replace("/\d{3}\s+1 _c([^\n]*?)\n.*/","$1",$record->getFields('852',true)[2]);
 		$o->tb = preg_replace("/\[\w\]:\s+(.*)/","$1",$record->getField('852', true)->getSubfield('z'));
-		$o->tbkz = preg_replace("/\d{3}\s+_a(.*)/","$1",$record->getField('935', true));
+		if ($record->getField('935', true))$o->tbkz = preg_replace("/\d{3}\s+_a(.*)/","$1",$record->getField('935', true));
 
 		/*
 		print_r($o);

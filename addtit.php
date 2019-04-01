@@ -8,6 +8,7 @@ use pear\file_marc\File;
 use  PHPOnCouch\CouchClient; //The CouchDB client object
 
 $client = new CouchClient('http://127.0.0.1:5984', 'marc21');
+$client2 = new CouchClient('http://127.0.0.1:5984', 'marc22');
 
 $journals = new File_MARC('data/marc21/051-tit.mrc');
 $os = [];
@@ -28,6 +29,7 @@ while ($record = $journals->next()) {
 		$o->sig = $lok->sig;
 		$o->tb = $lok->tb;
 		$o->tbkz = $lok->tbkz;
+		//$client->deleteDoc("A$ppn");
 
 		/*
 		print_r($o);
@@ -37,18 +39,19 @@ while ($record = $journals->next()) {
     	$o->checked = false;
     	$o->counter = 0;
     	$o->_id = preg_replace("/\d{3}\s+(.*)/","$1",$record->getField('001', true)->__toString());
-    	array_push($os, $o);
-    	array_push($dos, $lok);
+    	if($o->jahr<1946)array_push($os, $o);
+    	else array_push($dos, $o);
+    	//array_push($dos, $lok);
     	if($i==1000){
-			$client->storeDocs($os);
-			$client->deleteDocs($dos);
+			$client2->storeDocs($os);
+			//$client->deleteDocs($dos);
 			$os = [];
 			$i =0;
 		}
 	}
 
 }
-$client->storeDocs($os);
-$client->deleteDocs($dos);
+$client2->storeDocs($os);
+//$client->deleteDocs($dos);
 //file_put_contents("ppns.json", json_encode($ppns))
 ?>
