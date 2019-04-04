@@ -1,59 +1,3 @@
-function cIn(){
-	/*localDB.createIndex({
-		index: {fields: ['sig']},
-		name: "sig",
-		ddoc: "sig"
-	})
-	.then(function(){
-		localDB.createIndex({
-		  index: {
-		  	fields: ['tbkz']
-		  },
-		  name: "tbkz",
-		  ddoc: "tbkz"
-		})
-	})
-	.then(function (result){
-		console.log("Index angelegt")
-	})
-	.then(function(){
-		localDB.createIndex({
-		  index: {
-		  	fields: ['sig']
-		  },
-		  name: "sig",
-		  ddoc: "sig"
-		})
-	})
-	.then(function (result){
-		console.log("Index angelegt")
-	})
-	.then(function(){
-		localDB.createIndex({
-		  index: {
-		  	fields: ['tbkz','sig']
-		  },
-		  name: "tbkz-sig",
-		  ddoc: "tbkz-sig"
-		})
-	})
-	.then(function (result){
-		console.log("Index angelegt")
-	})
-	.then(function(){
-		localDB.createIndex({
-		  index: {
-		  	fields: ['sig','tbkz']
-		  },
-		  name: "sig-tbkz",
-		  ddoc: "sig-tbkz"
-		})
-	})
-	.then(function (result){
-		console.log("Index angelegt")
-	})
-	*/
-}
 
 
 
@@ -103,11 +47,15 @@ $(document).on('change', '.form-check-input', function(event) {
 		localDB.get(id)
 			.then(function (doc){
 				if(c=="vorhanden"){
-					doc.checked = true;
+					doc.checked = 1;
 					doc.counter = 1;
 				}
 				if(c=="fehlt"){
-					doc.checked = false;
+					doc.checked = 0;
+					doc.counter = 0;
+				}
+				if(c=="angebunden"){
+					doc.checked = 2;
 					doc.counter = 0;
 				}
 				if(c=="melden"){

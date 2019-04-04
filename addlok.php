@@ -16,7 +16,7 @@ $ppns = [];
 echo "\nVerarbeite Lokaldaten";
 while ($record = $journals->next()) {
 	foreach($record->getFields('852') as $v) forEach($v->getSubfields("c") as $sig) //echo $sig."\n";
-    if(preg_match("/preu|kultur/i",$record->getField('852', true)->getSubfield('z')) OR preg_match("/^pr|^ol/i",$record->getField('935', true)) OR (!preg_match("/(par|ent|ads|zsn|nib|np|a 25)/i",$sig)&& !$record->getField('935', true))){
+    if(preg_match("/preu|kultur/i",$record->getField('852', true)->getSubfield('z')) OR preg_match(!"/reichsgericht/i",$record->getField('852', true)->getSubfield('z')) OR preg_match("/^pr|^ol/i",$record->getField('935', true)) OR (!preg_match("/(par|ent|ads|zsn|nib|np|a 25|8\+|4\+|2\+)/i",$sig)&& !$record->getField('935', true))){
     //if((!empty($sig)&&!preg_match("/(par|ent|ads|zsn)/i",$sig) && !$record->getField('935', true))){
 		//echo $sig;
 		$i++;

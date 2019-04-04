@@ -107,14 +107,15 @@
 </div>        
 
 <script src="js/jquery-3.3.1.min.js"></script>
-<script src="js/app.js" type="text/javascript" charset="utf-8"></script>
 <script src="js/pouchdb-7.0.0.min.js" type="text/javascript" charset="utf-8"></script>
 <!--<script src="js/pouchdb.memory.js" type="text/javascript" charset="utf-8"></script>-->
 <script src="js/handlebars-v4.1.1.js" type="text/javascript" charset="utf-8"></script>
 <script src="js/pouchdb.find.js" type="text/javascript" charset="utf-8"></script>
 <script>
+/*
 var localDB = new PouchDB('ol');
 var remoteDB = new PouchDB('http://localhost:5984/ol');
+*/
 var localDB = new PouchDB('pr');
 var remoteDB = new PouchDB('http://localhost:5984/pr');
 
@@ -204,7 +205,7 @@ function suche(q,limit=10,direction="x"){
 			d.docs.forEach(
 				function(e){
 					
-					while(e.sig.match(/(.*?)0+([1-9]+.*)/))e.sig = e.sig.replace(/(.*?)0+([1-9]+.*)/g,"$1$2")
+					while(e.sig.match(/(.*?)\b0+([1-9]+.*)/))e.sig = e.sig.replace(/(.*?)\b0+([1-9]+.*)/g,"$1$2")
 					var source   = document.getElementById("bibentry-template").innerHTML;
 					var template = Handlebars.compile(source);
 					var context = e;
@@ -253,6 +254,7 @@ jQuery(document).ready(function($) {
 });
 
 </script>
+<script src="js/app.js" type="text/javascript" charset="utf-8"></script>
 <script id="bibentry-template" type="text/x-handlebars-template">
 	<tr id="{{_id}}">
 	  	<td>{{sig}}</td>
@@ -261,15 +263,21 @@ jQuery(document).ready(function($) {
 	  	<td>{{jahr}}</td>
 	  	<td>
 	  		<div class="form-check" >
-			  <input class="form-check-input" type="radio" id="exampleRadios1{{_id}}" value="vorhanden" {{#if checked}}{{#ifgt counter 0}}checked="checked"{{/ifgt}}{{/if}}>
+			  <input class="form-check-input" type="radio" id="exampleRadios1{{_id}}" value="vorhanden" {{#ifeq checked 1}}{{#ifgt counter 0}}checked="checked"{{/ifgt}}{{/ifeq}}>
 			  <label class="form-check-label" for="exampleRadios1{{_id}}">
 			    Vorhanden
 			  </label>
 			</div>
 			<div class="form-check">
-			  <input class="form-check-input" type="radio"  id="exampleRadios2{{_id}}" value="fehlt" {{#unless checked}}checked="checked"{{/unless}} {{#if checked}}{{#ifeq counter 0}}checked="checked"{{/ifeq}}{{/if}}>
+			  <input class="form-check-input" type="radio"  id="exampleRadios2{{_id}}" value="fehlt" {{#unless checked}}checked="checked"{{/unless}} {{#ifeq checked 0}}{{#ifeq counter 0}}checked="checked"{{/ifeq}}{{/ifeq}}>
 			  <label class="form-check-label" for="exampleRadios2{{_id}}">
 			    Fehlt
+			  </label>
+			</div>
+			<div class="form-check">
+			  <input class="form-check-input" type="radio"  id="exampleRadios3{{_id}}" value="angebunden" {{#ifeq checked 2}}checked="checked"{{/ifeq}}>
+			  <label class="form-check-label" for="exampleRadios3{{_id}}">
+			    Angebunden
 			  </label>
 			</div>
 			<div class="form-check">
