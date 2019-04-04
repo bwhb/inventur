@@ -3,3 +3,4 @@ vendor/
 data/
 composer.lock
 inventur.sublime-project
+ppns.json
