@@ -1,7 +1,6 @@
 <?php
 ini_set('memory_limit', '1024M'); // or you could use 1G
-#ini_set('display_errors','Off');
-ini_set('error_reporting', 0 );
+ini_set('display_errors','Off');ini_set('error_reporting', 0 );
 
 require __DIR__ . '/vendor/autoload.php';
 
@@ -15,10 +14,11 @@ $os = [];
 $ppns = [];
 echo "\nVerarbeite Lokaldaten";
 while ($record = $journals->next()) {
+	
 	foreach($record->getFields('852') as $v) forEach($v->getSubfields("c") as $sig) //echo $sig."\n";
-    if(preg_match("/preu|kultur/i",$record->getField('852', true)->getSubfield('z')) OR preg_match(!"/reichsgericht/i",$record->getField('852', true)->getSubfield('z')) OR preg_match("/^pr|^ol/i",$record->getField('935', true)) OR (!preg_match("/(par|ent|ads|zsn|nib|np|a 25|8\+|4\+|2\+)/i",$sig)&& !$record->getField('935', true))){
-    //if((!empty($sig)&&!preg_match("/(par|ent|ads|zsn)/i",$sig) && !$record->getField('935', true))){
-		//echo $sig;
+    
+//    if((preg_match("/preu|kultur/i",$record->getField('852', true)->getSubfield('z')) && preg_match(!"/reichsgericht/i",$record->getField('852', true)->getSubfield('z')))||preg_match("/^pr|^ol/i",$record->getField('935', true))||(!preg_match("/(par|ent|ads|zsn|nib|np|a 25|8\+|4\+|2\+)/i",$sig))){
+    if(!preg_match("/reichsgericht|volksgericht/i",$record->getField('852', true)->getSubfield('z')||!preg_match("/(par|ent|ads|zsn|nib|np|a 25|8\+|4\+|2\+)/i",$sig) && !$record->getField('935', true))&&((preg_match("/preu|kultur/i",$record->getField('852', true)->getSubfield('z')))||preg_match("/^pr|^ol/i",$record->getField('935', true)))){
 		$i++;
 		unset ($o);
 		if ($record->getField('004', true)){

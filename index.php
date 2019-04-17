@@ -50,38 +50,38 @@
       <div class="sidebar-sticky">
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a class="nav-link active" href="#">
-              <span data-feather="home"></span>
+            <a class="nav-link active dbSelect" id="olkg" href="#">
+              <span data-feather="database"></span>
               OLKG 
             </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="home"></span>
+          <li class="nav-item" >
+            <a class="nav-link dbSelect" id="provg" href="#">
+              <span data-feather="database"></span>
               PrOVG 
             </a>
           </li>
         </ul>
 
-        <!--<h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-          <span>PrOVG</span>
+        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+          <span>Weiteres</span>
           <a class="d-flex align-items-center text-muted" href="#">
             <span data-feather="plus-circle"></span>
           </a>
         </h6>
         <ul class="nav flex-column mb-2">
           <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="file-text"></span>
-              Current month
+            <a class="nav-link" id="recheck" href="#">
+              <span data-feather="list"></span>
+              Prüffälle
             </a>
           </li>
         </ul>
-      </div>-->
+      </div>
     </nav>
 
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-      <h2>Inventurliste</h2>
+      <h2 id="h2i">OLKG-Inventurliste</h2>
       <div class="table-responsive">
         <table class="table table-striped table-sm">
           <thead>
@@ -111,13 +111,14 @@
 <!--<script src="js/pouchdb.memory.js" type="text/javascript" charset="utf-8"></script>-->
 <script src="js/handlebars-v4.1.1.js" type="text/javascript" charset="utf-8"></script>
 <script src="js/pouchdb.find.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/feather.min.js"></script>
 <script>
 /*
 var localDB = new PouchDB('ol');
 var remoteDB = new PouchDB('http://localhost:5984/ol');
 */
-var localDB = new PouchDB('pr');
-var remoteDB = new PouchDB('http://localhost:5984/pr');
+var localDB = new PouchDB('ol');
+var remoteDB = new PouchDB('http://localhost:5984/ol');
 
 Handlebars.registerHelper('ifeq', function (a, b, options) {
     if (a == b) { return options.fn(this); }
@@ -200,28 +201,7 @@ function suche(q,limit=10,direction="x"){
 				   "use_index":"_design/sig"
 			})
 		}
-	}).then(function(d){
-			$("#biblist").empty()
-			d.docs.forEach(
-				function(e){
-					
-					while(e.sig.match(/(.*?)\b0+([1-9]+.*)/))e.sig = e.sig.replace(/(.*?)\b0+([1-9]+.*)/g,"$1$2")
-					var source   = document.getElementById("bibentry-template").innerHTML;
-					var template = Handlebars.compile(source);
-					var context = e;
-					var html    = template(context);
-					$("#biblist").append(html);
-
-					/*
-
-					var source   = document.getElementById("bibentry2-template").innerHTML;
-					var template = Handlebars.compile(source);
-					var context = e;
-					var html    = template(context);
-					$("#biblist2").append(html);
-					*/
-			})
-		})
+	}).then(function(d){renderList(d)})
 	//})
 
 
@@ -229,26 +209,10 @@ function suche(q,limit=10,direction="x"){
 
 
 jQuery(document).ready(function($) {
+	feather.replace();
+
+
 	
-
-
-	localDB.sync(remoteDB,{live:true,retry: true})
-		.on('change', function (change) {
-		  $(".sync").empty().append('<div title="'+change.change.docs_read+'" class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>');
-		})
-		.on('paused', function (info) {
-		  $(".sync").empty();
-		  cIn();
-		  console.log("paused")
-		})
-		.on('active', function (info) {
-		  $(".sync").empty().append('<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>');
-		  console.log("active")
-		})
-		.on('error', function (err) {
-		  console.log("err")
-		  $(".sync").text("Synchronisation nicht möglich.")
-		});
 	
 
 });
@@ -257,7 +221,7 @@ jQuery(document).ready(function($) {
 <script src="js/app.js" type="text/javascript" charset="utf-8"></script>
 <script id="bibentry-template" type="text/x-handlebars-template">
 	<tr id="{{_id}}">
-	  	<td>{{sig}}</td>
+	  	<td>{{sig}}<br>{{_design}}</td>
 	  	<td>{{aut}}</td>
 	  	<td>{{titel}}{{#if seq}}<br>{{seq}}{{/if}}{{#if gtitel}}<br>({{gtitel}}){{/if}}</td>
 	  	<td>{{jahr}}</td>
@@ -285,6 +249,15 @@ jQuery(document).ready(function($) {
 			  <label class="form-check-label" for="inlineRadio3{{_id}}">Melden</label>
 			</div>
 		</td>
+	</tr>
+</script>
+
+<script id="recheck-template" type="text/x-handlebars-template">
+	<tr id="{{_id}}">
+	  	<td>{{sig}}</td>
+	  	<td>{{aut}}</td>
+	  	<td>{{titel}}{{#if seq}}<br>{{seq}}{{/if}}{{#if gtitel}}<br>({{gtitel}}){{/if}}</td>
+	  	<td>{{jahr}}</td>
 	</tr>
 </script>
 
