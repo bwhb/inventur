@@ -67,7 +67,6 @@ with open('data/marc21/051-lok.mrc', 'rb') as fh:
             print (i)
         #print(record['004'].format_field())
         dbEntry['ppn'] = record['004'].format_field()
-        dbEntry['_id'] = record['001'].format_field()
 
         if record['866']:
             dbEntry['seq'] = record['866']['a']
@@ -79,13 +78,14 @@ with open('data/marc21/051-lok.mrc', 'rb') as fh:
                 dbEntry['sig'] = re.sub(r'(.*?\b)(\d{1,4})(\b.*)',signieren,dbEntry['sig'])
                 #print (dbEntry['sig'])
 
-        if re.search('Teilbestand.*(Preu|Oberlandeskultur)',record['852'].format_field()) or (record['935'] and re.search('pr|ol',record['935'].format_field())) :
+        if re.search('Teilbestand.*(Preu|Oberlandeskultur)',record['852'].format_field()) or (record['935'] and re.search('pr|ol',record['935'].format_field()) or not record['935']) :
             if not re.search('reichs',record['852'].format_field(), re.IGNORECASE) or not re.search(r'(par|ent|ads|zsn|nib|np|a 25|8\+|4\+|2\+)',xstr(dbEntry['sig']), re.IGNORECASE):
                 if re.search('Oberlandeskultur',record['852'].format_field()):
                     dbEntry['tbkz'] = "ol"
                     doc = db.get(record['004'].format_field())
                     if doc:
                         dbEntry.update(doc)
+                        dbEntry['_id'] = record['001'].format_field()
                     ol.append(dbEntry)
                     if i % 1000 == 0:
                         #print(ol)
@@ -98,6 +98,7 @@ with open('data/marc21/051-lok.mrc', 'rb') as fh:
                     doc = db.get(record['004'].format_field())
                     if doc:
                         dbEntry.update(doc)
+                        dbEntry['_id'] = record['001'].format_field()
                     pr.append(dbEntry)
                     if i % 1000 == 0:
                         #print(pr)
