@@ -19,6 +19,8 @@ function dbInit(){
 
 function renderList(d,templ="bib"){
 	$("#biblist").empty()
+	$(".table-responsive").show()
+	$(".dbAdd").hide()
 		d.docs.forEach(function(e){
 			while(e.sig.match(/(.*?)\b0+([1-9]+.*)/))e.sig = e.sig.replace(/(.*?)\b0+([1-9]+.*)/g,"$1$2")
 			if(templ=="bib") var source   = document.getElementById("bibentry-template").innerHTML;
@@ -93,6 +95,9 @@ $(document).on('click', '#olkg', function(event) {
 	dbInit();
 	$("#h2i").text("OLKG-Inventurliste")
 	$(".dbSelect").removeClass('active');
+	$(".dbAdd").hide()
+	$(".table-responsive").show()
+	$("#biblist,#biblist2").empty()
 	$(this).addClass("active");	
 	})
 .on('click', '#provg', function(event) {
@@ -102,6 +107,9 @@ $(document).on('click', '#olkg', function(event) {
 	dbInit();
 	$("#h2i").text("PrOVG-Inventurliste")
 	$(".dbSelect").removeClass('active');
+	$(".dbAdd").hide()
+	$(".table-responsive").show()
+	$("#biblist,#biblist2").empty()
 	$(this).addClass("active");
 	});
 
@@ -124,6 +132,16 @@ $(document).on('click', '#recheck', function(event) {
 			renderList(d,"recheck");
 		});
 });
+
+$(document).on('click', '#dbAdd', function(event) {
+	event.preventDefault();
+	$(".table-responsive").hide()
+	$(".dbAdd").empty().show();
+	source = document.getElementById("dbAdd-template").innerHTML
+	var template = Handlebars.compile(source);
+	var html    = template(template);
+	$(".dbAdd").append(html);
+})
 
 $(document).on('change', '.form-check-input', function(event) {
 	event.preventDefault();

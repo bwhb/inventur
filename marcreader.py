@@ -1,5 +1,5 @@
 from pymarc import MARCReader
-import re, couchdb, json
+import re, couchdb, json,sys
 
 def xstr(s):
     if s is None:
@@ -10,6 +10,13 @@ def signieren(data):
     return data.group(1) + '{:05d}'.format(int(data.group(2))) +data.group(3)
 
 couch = couchdb.Server('http://localhost:5984/')
+
+for d in ["_users",'ol','pr','ppn']:
+    print ("Bereite vor: "+d)
+    if d in couch:
+        del couch[d] 
+    couch.create(d)
+
 db = couch['ppn']
 docs = []
 i = 0
@@ -51,6 +58,7 @@ with open('data/marc21/051-tit.mrc', 'rb') as fh:
             db.update((docs))
             docs = []
             i=0
+            sys.stdout.write('.')
         i = i + 1
         
 
@@ -64,7 +72,7 @@ with open('data/marc21/051-lok.mrc', 'rb') as fh:
         dbEntry = {}
         i = i+1
         if i % 1000 == 0:
-            print (i)
+           sys.stdout.write('.')
         #print(record['004'].format_field())
         dbEntry['ppn'] = record['004'].format_field()
 
@@ -112,3 +120,8 @@ with open('data/marc21/051-lok.mrc', 'rb') as fh:
 
                 else: 
                     pass
+
+    db = couch['pr']
+    db.update(pr)
+    db = couch['ol']
+    db.update(ol)

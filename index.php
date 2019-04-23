@@ -72,8 +72,12 @@
         <ul class="nav flex-column mb-2">
           <li class="nav-item">
             <a class="nav-link" id="recheck" href="#">
-              <span data-feather="list"></span>
+              <span data-feather="alert-circle"></span>
               Prüffälle
+            </a>
+            <a class="nav-link" id="dbAdd" href="#">
+              <span data-feather="folder-plus"></span>
+              Datensatz hinzuf&uuml;gen
             </a>
           </li>
         </ul>
@@ -102,6 +106,7 @@
         <div id="biblist2">
         </div>
       </div>
+      <div class="dbAdd"></div>
     </main>
   </div>
 </div>        
@@ -210,11 +215,6 @@ function suche(q,limit=10,direction="x"){
 
 jQuery(document).ready(function($) {
 	feather.replace();
-
-
-	
-	
-
 });
 
 </script>
@@ -260,6 +260,30 @@ jQuery(document).ready(function($) {
 	  	<td>{{jahr}}</td>
 	</tr>
 </script>
+
+
+<script id="dbAdd-template" type="text/x-handlebars-template">
+	<form>
+	  <div class="form-group">
+	    <label for="sig">Signatur</label>
+	    <input type="" class="form-control" id="sig" placeholder="Signatur">
+	  </div>
+	  <div class="form-group">
+	    <label for="aut">Autor</label>
+	    <input type="" class="form-control" id="aut" placeholder="Autor">
+	  </div>
+	  <div class="form-group">
+	    <label for="tit">Titel etc.</label>
+	    <input type="" class="form-control" id="tit" placeholder="Titel">
+	  </div>
+	  <div class="form-group">
+	    <label for="jahr">Jahr</label>
+	    <input type="" class="form-control" id="jahr" placeholder="Jahr">
+	  </div>
+	  <button type="submit" class="btn btn-primary">Absenden</button>
+	</form>
+</script>
+
 
 <script id="bibentry2-template" type="text/x-handlebars-template">
 	<div class="card" id="{{_id}}">
