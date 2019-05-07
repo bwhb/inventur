@@ -4,3 +4,4 @@ data/
 composer.lock
 inventur.sublime-project
 ppns.json
+docker-compose.yml

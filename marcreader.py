@@ -7,7 +7,7 @@ def xstr(s):
     return str(s)
 
 def signieren(data):
-    return data.group(1) + '{:05d}'.format(int(data.group(2))) +data.group(3)
+    return '{:05d}'.format(int(data.group(1)))
 
 couch = couchdb.Server('http://localhost:5984/')
 
@@ -83,7 +83,8 @@ with open('data/marc21/051-lok.mrc', 'rb') as fh:
             if f['c']:
                 dbEntry['sig'] = re.findall(r'^[\-\#\+]*(.*)', f['c'])
                 dbEntry['sig'] = dbEntry['sig'][0]
-                dbEntry['sig'] = re.sub(r'(.*?\b)(\d{1,4})(\b.*)',signieren,dbEntry['sig'])
+                #dbEntry['sig'] = re.sub(r'(.*?\b)(\d{1,4})(\b.*)',signieren,dbEntry['sig'])
+                dbEntry['sig'] = re.sub(r'\b(\d{1,4})\b',signieren,dbEntry['sig'])
                 #print(dbEntry['sig'])
                 #print (dbEntry['sig'])
         if "sig" in dbEntry:

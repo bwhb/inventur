@@ -75,7 +75,7 @@
               <span data-feather="alert-circle"></span>
               Prüffälle
             </a>
-            <a class="nav-link" id="dbAdd" href="#">
+            <a class="nav-link" id="dbEdit" href="#">
               <span data-feather="folder-plus"></span>
               Datensatz hinzuf&uuml;gen
             </a>
@@ -106,7 +106,7 @@
         <div id="biblist2">
         </div>
       </div>
-      <div class="dbAdd"></div>
+      <div class="dbEdit"></div>
     </main>
   </div>
 </div>        
@@ -151,7 +151,13 @@ function suche(q,limit=10,direction="x"){
 		});
 	
 	crIn.then(function(){
+	
+	te ='Fn 100/56'; 
+	while(te.match(/\b(\d{1,4})\b/)){
+	}
 */
+	$("#suche").val(q.replace(/\b0+([1-9]+)\b/g,"$1"));
+	q = q.replace(/\b(\d{1,4})\b/g ,function(m,p1){return p1.padStart(5,'0')})
 	localDB.createIndex({
 		index: {fields: ['sig']},
 		name: "sig",
@@ -172,7 +178,7 @@ function suche(q,limit=10,direction="x"){
 				return localDB.find({
 					   "selector": {
 					      "sig": {
-					         "$gt": q
+					         "$gte": q
 					      }
 					   },
 					   "sort": [{"sig":"asc"}],
@@ -186,7 +192,7 @@ function suche(q,limit=10,direction="x"){
 			return localDB.find({
 				   "selector": {
 				      "sig": {
-				         "$gt": q
+				         "$gte": q
 				      }
 				   },
 				   "sort": [{"sig":"asc"}],
@@ -232,6 +238,9 @@ jQuery(document).ready(function($) {
 			    Vorhanden
 			  </label>
 			</div>
+			<div class="form-check input-group">
+				<input class="form-check-input form-control" placeholder="Anzahl" type="text" name="exemplare" id="exemplare" value="{{counter}}"">
+			</div>	
 			<div class="form-check">
 			  <input class="form-check-input" type="radio"  id="exampleRadios2{{_id}}" value="fehlt" {{#unless checked}}checked="checked"{{/unless}} {{#ifeq checked 0}}{{#ifeq counter 0}}checked="checked"{{/ifeq}}{{/ifeq}}>
 			  <label class="form-check-label" for="exampleRadios2{{_id}}">
@@ -262,7 +271,7 @@ jQuery(document).ready(function($) {
 </script>
 
 
-<script id="dbAdd-template" type="text/x-handlebars-template">
+<script id="dbEdit-template" type="text/x-handlebars-template">
 	<form>
 	  <div class="form-group">
 	    <label for="sig">Signatur</label>
@@ -280,7 +289,7 @@ jQuery(document).ready(function($) {
 	    <label for="jahr">Jahr</label>
 	    <input type="" class="form-control" id="jahr" placeholder="Jahr">
 	  </div>
-	  <button type="submit" class="btn btn-primary">Absenden</button>
+	  <button type="submit" id="dbEditSubmit" class="btn btn-primary">Absenden</button>
 	</form>
 </script>
 
