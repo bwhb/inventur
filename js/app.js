@@ -94,7 +94,7 @@ $(document).on('click', '.suche', function(event) {
 $(document).on('click', '#olkg', function(event) {
 	event.preventDefault();
 	localDB = new PouchDB('ol');
-	remoteDB = new PouchDB('http://localhost:5984/ol');
+	remoteDB = new PouchDB('https://mb21.hopto.org:6984/ol');
 	dbInit();
 	$("#h2i").text("OLKG-Inventurliste")
 	$(".dbSelect").removeClass('active');
@@ -106,7 +106,7 @@ $(document).on('click', '#olkg', function(event) {
 .on('click', '#provg', function(event) {
 	event.preventDefault();
 	localDB = new PouchDB('pr');
-	remoteDB = new PouchDB('http://localhost:5984/pr');
+	remoteDB = new PouchDB('https://mb21.hopto.org:6984/pr');
 	dbInit();
 	$("#h2i").text("PrOVG-Inventurliste")
 	$(".dbSelect").removeClass('active');

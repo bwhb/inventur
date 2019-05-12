@@ -9,7 +9,7 @@ def xstr(s):
 def signieren(data):
     return '{:05d}'.format(int(data.group(1)))
 
-couch = couchdb.Server('http://localhost:5984/')
+couch = couchdb.Server('http://bw:cb%3Aaq1sw2de3@pi.hole:5984/')
 
 for d in ["_users",'ol','pr','ppn']:
     print ("Bereite vor: "+d)

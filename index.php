@@ -123,7 +123,8 @@ var localDB = new PouchDB('ol');
 var remoteDB = new PouchDB('http://localhost:5984/ol');
 */
 var localDB = new PouchDB('ol');
-var remoteDB = new PouchDB('http://localhost:5984/ol');
+//var remoteDB = new PouchDB('http://localhost:5984/ol');
+var remoteDB = new PouchDB('https://mb21.hopto.org:6984/ol');
 
 Handlebars.registerHelper('ifeq', function (a, b, options) {
     if (a == b) { return options.fn(this); }
