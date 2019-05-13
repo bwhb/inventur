@@ -1,0 +1,15 @@
+CACHE MANIFEST
+# v1.1
+index.html
+vendor/twbs/bootstrap/dist/css/bootstrap.min.css
+css/build.css
+css/dashboard.css
+js/jquery-3.3.1.min.js
+js/pouchdb-7.0.0.min.js
+js/handlebars-v4.1.1.js
+js/pouchdb.find.js
+js/feather.min.js
+
+FALLBACK:
+/ index.html
+index.php index.html
