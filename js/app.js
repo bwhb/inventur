@@ -16,11 +16,14 @@ function dbInit(){
 		  $(".sync").text("Synchronisation nicht möglich.")
 		});
 }
-
+function h2create(id){
+	if (id=="olkg")$("#h2i").text("OLKG-Inventurliste")
+	if (id=="provg")$("#h2i").text("PrOVG-Inventurliste")
+}
 function renderList(d,templ="bib"){
 	$("#biblist").empty()
 	$(".table-responsive").show()
-	$(".dbEdit").hide()
+	$(".dbEditor").hide()
 		d.docs.forEach(function(e){
 			while(e.sig.match(/(.*?)\b0+([1-9]+.*)/))e.sig = e.sig.replace(/(.*?)\b0+([1-9]+.*)/g,"$1$2")
 			if(templ=="bib") var source   = document.getElementById("bibentry-template").innerHTML;
@@ -57,10 +60,10 @@ function pagination(direction, id){
 function keycodes (e) {
 	//console.log(e)
 	if (e.key=="Enter")$(".suche").click()
-	if (e.key=="ArrowRight"&& e.ctrlKey){
+	if (e.key=="ArrowRight"&& e.ctrlKey && $(".active").hasClass("inventur")) {
 		if($("#biblist").children('tr').length>0)pagination("f",$("#biblist>tr").last().prop("id"));
 	}
-	if (e.key=="ArrowLeft"&& e.ctrlKey){
+	if (e.key=="ArrowLeft"&& e.ctrlKey && $(".active").hasClass("inventur")){
 		if($("#biblist").children('tr').length>0)pagination("b",$("#biblist>tr").first().prop("id"));
 	}
 }
@@ -88,6 +91,9 @@ jQuery(document).ready(function($) {
 
 $(document).on('click', '.suche', function(event) {
 		event.preventDefault();
+		$(".dbSelect.active").parent(".topNav").find(".nav-item").find(".active").removeClass('active')
+		$(".dbSelect.active").parent(".topNav").find('.inventur').addClass('active')
+		
 		q=$("#suche").val();
 		suche(q);
 	});
@@ -96,28 +102,46 @@ $(document).on('click', '#olkg', function(event) {
 	localDB = new PouchDB('ol');
 	remoteDB = new PouchDB('https://mb21.hopto.org:6984/ol');
 	dbInit();
-	$("#h2i").text("OLKG-Inventurliste")
-	$(".dbSelect").removeClass('active');
+	h2create("olkg");
+	//$("#h2i").text("OLKG-Inventurliste")
+	$(".active").removeClass('active');
 	$(this).addClass("active");	
-	$(".dbEdit").hide()
+	$(this).parent("li").find(".inventur").addClass("active");
+	$(".dbEditor").hide()
 	$(".table-responsive").show()
 	$("#biblist,#biblist2").empty()
-	})
+	q=$("#suche").val();
+	suche(q);
+})
 .on('click', '#provg', function(event) {
 	event.preventDefault();
 	localDB = new PouchDB('pr');
 	remoteDB = new PouchDB('https://mb21.hopto.org:6984/pr');
 	dbInit();
-	$("#h2i").text("PrOVG-Inventurliste")
-	$(".dbSelect").removeClass('active');
+	//$("#h2i").text("PrOVG-Inventurliste")
+	h2create("provg");
+	$(".active").removeClass('active');
 	$(this).addClass("active");
-	$(".dbEdit").hide()
+	$(this).parent("li").find(".inventur").addClass("active");
+	$(".dbEditor").hide()
 	$(".table-responsive").show()
 	$("#biblist,#biblist2").empty()
-	});
+	q=$("#suche").val();
+	suche(q);
+})
+.on('click', '.inventur', function(event) {
+	id = $(this).parents(".topNav").find(".dbSelect").prop("id");
+	$("#"+id).click();
+});
 
-$(document).on('click', '#recheck', function(event) {
+
+
+$(document).on('click', '.recheck', function(event) {
 		event.preventDefault();
+		$(".active").removeClass('active');
+		$(this).parents(".topNav").find(".dbSelect").addClass('active')
+		$(this).addClass("active")
+		h2create($(this).parents(".topNav").find(".dbSelect").prop("id"))
 		localDB.createIndex({
 			index: {fields: ['recheck','sig']},
 			name: "recheck2",
@@ -136,14 +160,18 @@ $(document).on('click', '#recheck', function(event) {
 		});
 });
 
-$(document).on('click', '#dbEdit', function(event) {
+$(document).on('click', '.dbEdit', function(event) {
 	event.preventDefault();
+	$(".active").removeClass('active');
+	$(this).addClass("active")
+	$(this).parents(".topNav").find(".dbSelect").addClass('active')
+	h2create($(this).parents(".topNav").find(".dbSelect").prop("id"))
 	$(".table-responsive").hide()
-	$(".dbEdit").empty().show();
-	source = document.getElementById("dbEdit-template").innerHTML
+	$(".dbEditor").empty().show();
+	source = document.getElementById("dbEditor-template").innerHTML
 	var template = Handlebars.compile(source);
 	var html    = template(template);
-	$(".dbEdit").append(html);
+	$(".dbEditor").append(html);
 })
 
 $(document).on('change', '.form-check-input', function(event) {
